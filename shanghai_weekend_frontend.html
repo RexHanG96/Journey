@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>上海周末游攻略</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei","PingFang SC",sans-serif;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .bg-home {
+      position: fixed;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1534531688091-a458257992cb?auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+      z-index: -1;
+      filter: brightness(0.5) contrast(1.2);
+    }
+
+    .screen {
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      animation: slideIn 0.6s ease;
+    }
+
+    @keyframes slideIn { from { transform: translateX(60px); opacity: 0;} to { transform: translateX(0); opacity: 1;} }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1;} to { transform: translateX(-60px); opacity: 0;} }
+
+    .active { display: flex; }
+
+    .icon-btn {
+      cursor: pointer;
+      font-size: 28px;
+      color: #0ff;
+      width: 45px;
+      margin-bottom: 10px;
+      text-align: left;
+      padding-left: 20px;
+      text-shadow: 0 0 8px #0ff, 0 0 12px #0ff;
+    }
+
+    .modules {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .module-btn {
+      padding: 18px 28px;
+      background: rgba(0,255,255,0.05);
+      border: 1px solid #0ff;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 20px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 140px;
+      color: #0ff;
+      box-shadow: 0 0 10px #0ff, 0 0 20px #0ff inset;
+      transition: 0.3s all;
+    }
+    .module-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #0ff, 0 0 40px #0ff inset;
+    }
+
+    .module-icon {
+      font-size: 36px;
+    }
+
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #0ff;
+      border-radius: 14px;
+      padding: 15px;
+      display: flex;
+      gap: 12px;
+      box-shadow: 0 0 10px #0ff inset;
+      align-items: center;
+      color: #fff;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+      transition: 0.3s all;
+    }
+    .card:hover {
+      box-shadow: 0 0 20px #0ff inset, 0 0 15px #0ff;
+      transform: scale(1.02);
+    }
+
+    .card img {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #0ff;
+      box-shadow: 0 0 6px #0ff;
+    }
+
+    .card-text {
+      font-size: 16px;
+      text-align: left;
+      color: #fff;
+    }
+	
+	.card-text a {
+  color: #fff;
+  text-decoration: underline;   /* 如果你不想要下划线，可以删掉 */
+}
+
+
+    h1 {
+      color: #fff; /* 保持白色 */
+      font-weight: 900;
+    }
+
+    .start-arrow {
+      color: #fff !important; /* 保持白色 */
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+<div class="bg-home"></div>
+
+<!-- 第一层：标题页面 -->
+<div id="screen1" class="screen active">
+  <h1>上海周末游攻略</h1>
+  <div class="start-arrow" onclick="goToModules()">⬇ 开始</div>
+</div>
+
+<!-- 第二层：四大模块 -->
+<div id="screen2" class="screen">
+  <div class="icon-btn" onclick="backToStart()">⟵</div>
+  <div class="modules">
+    <div class="module-btn" onclick="openContent('eat')"><div class="module-icon">🍜</div>吃</div>
+    <div class="module-btn" onclick="openContent('live')"><div class="module-icon">🏨</div>住</div>
+    <div class="module-btn" onclick="openContent('play')"><div class="module-icon">🎡</div>玩</div>
+	<div class="module-btn" onclick="openContent('wear')"><div class="module-icon">⚡</div>其他</div>
+  </div>
+</div>
+
+<!-- 第三层：内容展示 -->
+<div id="screen3" class="screen">
+  <div class="icon-btn" onclick="backToModules()">⟵</div>
+  <div class="card-list" id="contentBox"></div>
+</div>
+
+<script>
+  function goToModules() {
+    document.getElementById('screen1').classList.remove('active');
+    document.getElementById('screen2').classList.add('active');
+  }
+
+  function backToModules() {
+    document.getElementById('screen3').classList.remove('active');
+    document.getElementById('screen2').classList.add('active');
+  }
+
+  function openContent(type) {
+    const content = {
+      eat: "<div class='card-text'> (1) 李百蟹外滩江景餐厅： 蟹黄面<br><br>(2) 沪公馆·上海菜：老上海罗宋汤、桂花红烧肉、白玉方糕、江南花雕熟醉蟹 <br><br>(3) 外滩家宴·上海菜：白切鸡、红烧桂花肉、松鼠鲈鱼、舍得菜苔碧绿生青等 <br><br> (4)哈灵面馆：牛蛙面<br><br> (5)太琼糟粕醋火锅（龙之梦店）<br><br> (6)瑞福园联谊餐室（茂名南路店）<br><br> (7)万寿斋（山阴路店）<br><br> (8)老兴鲜餐厅<br><br> (9)大壶春（四川中路店）<br><br> (10)兰亭集<br><br> (11)沪西老弄堂<br><br></div>",
+      live: "<div class='card-text'> (1)外滩区域(南京东路附近)；<br><br> (2)陆家嘴区域<br><br> (3)静安寺区域 <br><br> (4)田子坊/打浦桥区域<br><br><br> 建议1:订酒店或民宿时多看看真实的图片和评价，要重点看评价和服务，不要只看网图好看就下单<br> 建议2:节假日一定要提前至少一周预定酒店，价格会便宜很多，也不建议一直换酒店住，很麻烦!</div>",
+      play: "<div class='card-text'> 方案一：武康大楼→(12min)→武康路→(10min)→静安寺→(地铁4号线27min)→城隍庙→(6min)→豫园→(22min)→陆家嘴→(2元轮渡)→外滩→(10min)→南京路步行街 <br><br> 方案二：南京路步行街→(地铁2号线 16min)→东方明珠→(12min)→陆家嘴→(10min)→国金中心→(地铁2号线 22min)→人民广场→(2号线19min)→外滩<br><br> </div>",
+      wear: "<div class='card-text'>  (1) <a href='https://www.xiaohongshu.com/discovery/item/69293966000000000d035898?source=webshare&xhsshare=pc_web&xsec_token=ABN7zfwbDe8rjhi-9kXTy8CRXpdm--YkDEUX67hDYGsa4=&xsec_source=pc_share' target='_blank'>展览</a><br><br>(2) <a href='https://www.xiaohongshu.com/discovery/item/692d7ac3000000001b0219a8?source=webshare&xhsshare=pc_web&xsec_token=AB5WFayao9sf3PCNeiMANYHpgWNqdzlqvD_7SxUg5yvgo=&xsec_source=pc_share' target='_blank'>活动</a> <br><br> (3) <a href='https://www.xiaohongshu.com/discovery/item/691c3313000000001f006eea?source=webshare&xhsshare=pc_web&xsec_token=ABUfCRFos7yAgu_DIWhSdHuslx7lVPdIXGu05QBQFeRzc=&xsec_source=pc_share' target='_blank'>圣诞</a> <br><br> (4) <a href='https://www.xiaohongshu.com/discovery/item/69159aae000000001b02087f?source=webshare&xhsshare=pc_web&xsec_token=ABafJgQXKIMZ7I9xqvkdnngbq8MAcYIGd-6UkXCRbuFR4=&xsec_source=pc_share' target='_blank'>主题市集</a></div>",
+	};
+    document.getElementById('contentBox').innerHTML = content[type];
+    document.getElementById('screen2').classList.remove('active');
+    document.getElementById('screen3').classList.add('active');
+  }
+
+  function backToStart() {
+    document.getElementById('screen2').classList.remove('active');
+    document.getElementById('screen1').classList.add('active');
+  }
+</script>
+
+</body>
+</html>
